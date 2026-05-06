@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIDDD 2026 — Exhibition Floor Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --navy:    #0a0045;
+  --teal-hi: #00c2c4;
+  --teal-lo: #00829e;
+  --orange:  #ff914d;
+  --red:     #ff3131;
+  --white:   #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background-color: var(--navy);
+  color: var(--white);
+  min-width: 1240px;
+  padding: 32px 44px 52px;
+  position: relative;
+}
+
+/* Hero image layer — sits behind everything */
+.hero-bg {
+  position: fixed;
+  inset: 0;
+  background-image: url('../Brand/Hero Images/hero_2.jpeg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.13;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Teal grid overlay — above hero */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,194,196,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,194,196,0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Noise grain — topmost texture layer */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wrap {
+  position: relative;
+  z-index: 3;
+  max-width: 1152px;
+  margin: 0 auto;
+  animation: pageIn 0.45s ease both;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Platinum shimmer — sweeps across, then pauses before repeating */
+@keyframes platinumShimmer {
+  0%   { background-position: -140% 0, 0 0; }
+  48%  { background-position: 220% 0, 0 0; }
+  100% { background-position: 220% 0, 0 0; }
+}
+
+/* ── HEADER ── */
+.hd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.hd-logo img { height: 52px; display: block; }
+
+.hd-logo-fallback {
+  display: none;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.3px;
+}
+.hd-logo-fallback em { color: var(--teal-hi); font-style: normal; }
+.hd-logo-fallback small {
+  display: block;
+  font-size: 8px;
+  font-weight: 300;
+  letter-spacing: 5px;
+  color: var(--teal-hi);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.hd-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.hd-edition {
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(0,194,196,0.45);
+}
+
+.hd-date {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #fff;
+  background: linear-gradient(105deg, #ff914d, #ff3131);
+  padding: 9px 20px;
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+}
+
+.hd-location {
+  font-size: 7.5px;
+  font-weight: 300;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── TITLE BAR ── */
+.title-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0,194,196,0.12);
+  margin-bottom: 18px;
+}
+
+.title-bar-accent {
+  width: 3px;
+  height: 28px;
+  background: linear-gradient(180deg, var(--teal-hi), var(--teal-lo));
+  flex-shrink: 0;
+}
+
+.title-bar-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal-hi);
+}
+
+.title-bar-rule {
+  flex: 1;
+  height: 1px;
+  background: rgba(0,194,196,0.1);
+}
+
+.title-bar-ref {
+  font-size: 7.5px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.15);
+}
+
+/* ── TOP STRIP ── */
+.top-strip {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 72px;
+}
+
+.top-pair { display: flex; gap: 4px; }
+
+.top-entry {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding-bottom: 8px;
+}
+
+.entry-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,49,49,0.65);
+}
+
+/* ── HALL ── */
+.hall {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,194,196,0.2);
+  background: rgba(3,0,35,0.62);
+  position: relative;
+  min-height: 510px;
+}
+
+.hall-main { display: flex; flex: 1; }
+
+.hall-bottom {
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 16px 8px;
+  border-top: 1px solid rgba(0,194,196,0.1);
+}
+
+/* Architectural corner marks */
+.hall::before { content: ''; position: absolute; top: -2px; left: -2px;  width: 14px; height: 14px; border-top: 2px solid var(--teal-hi); border-left: 2px solid var(--teal-hi); pointer-events: none; }
+.hall::after  { content: ''; position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; border-top: 2px solid var(--teal-hi); border-right: 2px solid var(--teal-hi); pointer-events: none; }
+.hall-bl { position: absolute; bottom: -2px; left: -2px;  width: 14px; height: 14px; border-bottom: 2px solid var(--teal-hi); border-left: 2px solid var(--teal-hi); }
+.hall-br { position: absolute; bottom: -2px; right: -2px; width: 14px; height: 14px; border-bottom: 2px solid var(--teal-hi); border-right: 2px solid var(--teal-hi); }
+
+/* ── WALLS ── */
+.lwall, .rwall {
+  width: 72px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 4px;
+  gap: 4px;
+}
+.lwall { border-right: 1px solid rgba(0,194,196,0.08); }
+.rwall { border-left:  1px solid rgba(0,194,196,0.08); }
+
+/* ── INTERIOR ── */
+.interior {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.clusters-wrap { display: flex; align-items: stretch; justify-content: center; }
+.cluster-col { display: flex; flex-direction: column; gap: 4px; }
+.booth-row { display: flex; gap: 4px; }
+.cluster-gap { height: 12px; }
+
+.buffet-line {
+  width: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 10px;
+  border-left: 1px dashed rgba(255,255,255,0.15);
+  border-right: 1px dashed rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.02);
+}
+.bl-icon { font-size: 11px; line-height: 1; }
+.bl-text {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  writing-mode: vertical-rl;
+}
+
+/* Reduced from flex:1 — eliminates dead space between lower clusters and bottom row */
+.hall-spacer { height: 14px; }
+
+.bottom-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 0 6px;
+}
+
+/* ── BOOTH BASE ── */
+.b {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5px 4px;
+  border-width: 1px;
+  border-style: solid;
+  position: relative;
+  transition: filter 0.15s, transform 0.12s;
+  cursor: default;
+}
+
+.b:hover { filter: brightness(1.14); transform: scale(1.025); z-index: 10; }
+
+/* Sizes — enlarged for legibility */
+.b-wall  { flex: 1; width: 100%; }
+.b-sm    { width: 96px;  height: 74px; }
+.b-dbl   { width: 196px; height: 74px; }   /* 2 × 96 + 4px gap */
+.b-perim { width: 96px;  height: 64px; }
+.b-foyer { width: 86px;  height: 58px; }
+
+/* Labels — Sora 800 for number, Sora 400 for name */
+.b-num {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.b-name {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+  line-height: 1.3;
+  margin-top: 3px;
+  opacity: 0.88;
+}
+
+/* ── TIER COLOURS ── */
+
+/* Platinum: animated shimmer sweep + top-edge highlight + faint outer glow */
+.platinum {
+  background-image:
+    linear-gradient(115deg, transparent 25%, rgba(255,255,255,0.38) 50%, transparent 75%),
+    linear-gradient(160deg, #d8e4f0 0%, #8fadc8 60%, #7898b8 100%);
+  background-size: 260% 100%, 100% 100%;
+  background-position: -140% 0, 0 0;
+  background-repeat: no-repeat, no-repeat;
+  border-color: #7898b8;
+  color: #0a0045;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.68),
+    inset 0 -1px 0 rgba(0,20,60,0.28),
+    0 0 12px rgba(180,215,248,0.2);
+  animation: platinumShimmer 3.5s ease-in-out infinite;
+}
+.platinum .b-num  { color: #0a0045; }
+.platinum .b-name { color: rgba(10,0,69,0.68); font-weight: 600; }
+
+/* Gold: static diagonal top-left shine + warm top-edge highlight */
+.gold {
+  background-image:
+    linear-gradient(135deg, rgba(255,248,180,0.28) 0%, rgba(255,240,120,0.08) 35%, transparent 58%),
+    linear-gradient(150deg, #d4a020 0%, #b07c08 55%, #8e6000 100%);
+  border-color: #7a5200;
+  color: #0a0045;
+  box-shadow: inset 0 1px 0 rgba(255,245,160,0.55);
+}
+.gold .b-num  { color: #0a0045; }
+.gold .b-name { color: rgba(10,0,69,0.65); }
+
+/* Silver: lighter static shine — clearly a step below gold */
+.silver {
+  background-image:
+    linear-gradient(135deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.05) 35%, transparent 58%),
+    linear-gradient(150deg, #5c6e80 0%, #3e5060 55%, #304050 100%);
+  border-color: #304050;
+  color: #c0d4e0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.24);
+}
+
+/* Bronze: warm top-edge only — subtle, present but receding */
+.bronze {
+  background-image:
+    linear-gradient(135deg, rgba(255,200,100,0.12) 0%, rgba(255,180,60,0.03) 30%, transparent 52%),
+    linear-gradient(150deg, #924e1a 0%, #6a3808 55%, #511e00 100%);
+  border-color: #4e2808;
+  color: #e8b870;
+  box-shadow: inset 0 1px 0 rgba(255,200,100,0.2);
+}
+
+/* Exhibitor: flat — no shine, deliberately muted */
+.exhibitor {
+  background: #1c2840;
+  border-color: #3a4860;
+  color: #8aa4c0;
+}
+
+.activ {
+  background: #004860;
+  border-color: var(--teal-hi);
+  color: #fff;
+}
+.activ .b-num { color: var(--teal-hi); }
+
+.avail {
+  background: #030030;
+  border-color: rgba(0,194,196,0.28);
+  border-style: dashed;
+  color: rgba(0,194,196,0.5);
+}
+.avail .b-num { font-size: 14px; font-weight: 600; }
+.avail .b-name { font-size: 9px; opacity: 0.7; }
+
+/* ── ENTRANCES STRIP ── */
+.entrances-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255,49,49,0.18);
+  border-bottom: 1px solid rgba(255,49,49,0.18);
+}
+
+.ent-arrow { display: flex; align-items: center; }
+.ent-arrow-group { display: flex; gap: 10px; align-items: center; }
+
+.ent-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,49,49,0.65);
+  padding: 0 12px;
+}
+
+/* ── FOYER ── */
+.foyer-wrap { padding: 10px 0 0; }
+
+.foyer-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(0,194,196,0.5);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.foyer-row { display: flex; justify-content: center; gap: 4px; }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0,194,196,0.1);
+}
+
+.legend-heading {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(0,194,196,0.6);
+  margin-right: 4px;
+}
+
+.legend-item { display: flex; align-items: center; gap: 8px; }
+
+.l-sw {
+  width: 16px;
+  height: 16px;
+  border-width: 1px;
+  border-style: solid;
+  flex-shrink: 0;
+}
+
+.l-sw.platinum {
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 55%), linear-gradient(160deg, #d8e4f0, #7898b8);
+  border-color: #7898b8;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+}
+.l-sw.gold {
+  background-image: linear-gradient(135deg, rgba(255,248,180,0.3) 0%, transparent 55%), linear-gradient(150deg, #d4a020, #8e6000);
+  border-color: #7a5200;
+  box-shadow: inset 0 1px 0 rgba(255,245,160,0.5);
+}
+.l-sw.silver {
+  background-image: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%), linear-gradient(150deg, #5c6e80, #304050);
+  border-color: #304050;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+}
+.l-sw.bronze {
+  background-image: linear-gradient(135deg, rgba(255,200,100,0.14) 0%, transparent 50%), linear-gradient(150deg, #924e1a, #511e00);
+  border-color: #4e2808;
+  box-shadow: inset 0 1px 0 rgba(255,200,100,0.2);
+}
+.l-sw.exhibitor { background: #1c2840; border-color: #3a4860; }
+.l-sw.activ     { background: #004860; border-color: #00c2c4; }
+.l-sw.avail     { background: #030030; border-color: rgba(0,194,196,0.28); border-style: dashed; }
+
+.legend-text {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.68);
+}
+
+/* ── NOTES / FOOTER ── */
+.notes {
+  margin-top: 14px;
+  font-size: 9.5px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.9;
+  letter-spacing: 0.2px;
+}
+.notes strong { color: rgba(255,255,255,0.55); font-weight: 600; }
+
+.footer {
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0,194,196,0.1);
+}
+
+.notes-contact {
+  color: rgba(0,194,196,0.7);
+  font-weight: 400;
+  text-decoration: none;
+}
+.notes-contact:hover { text-decoration: underline; }
+
+.footer-contact {
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: rgba(0,194,196,0.7);
+  text-decoration: none;
+}
+.footer-contact:hover { text-decoration: underline; }
+
+.footer-edition {
+  font-size: 7px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+}
+
+</style>
+</head>
+<body>
+
+<div class="hero-bg"></div>
+
+<div class="wrap">
+
+<!-- HEADER -->
+<header class="hd">
+  <div class="hd-logo">
+    <img src="../Brand/Logos/AI%20Drug%20Discovery%20%26%20Development%20Summit_Logo_FINAL-10.png" alt="AIDDD Summit"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div class="hd-logo-fallback">
+      <em>AI</em> DRUG DISCOVERY &amp;<br>DEVELOPMENT SUMMIT
+      <small>Summit</small>
+    </div>
+  </div>
+  <div class="hd-right">
+    <span class="hd-edition">5th Annual Edition</span>
+    <div class="hd-date">OCTOBER 27–29, 2026</div>
+    <div class="hd-location">Boston Marriott Copley Place</div>
+  </div>
+</header>
+
+<!-- TITLE BAR -->
+<div class="title-bar">
+  <div class="title-bar-accent"></div>
+  <span class="title-bar-text">Exhibition Floor Plan</span>
+  <div class="title-bar-rule"></div>
+  <span class="title-bar-ref">REF · SPEX / 2026 / 001</span>
+</div>
+
+<!-- VENUE -->
+<div class="venue">
+
+  <!-- TOP STRIP -->
+  <div class="top-strip">
+    <div class="top-pair">
+      <div class="b b-perim avail"><span class="b-num">49</span><span class="b-name">Available</span></div>
+      <div class="b b-perim activ"><span class="b-num">48</span><span class="b-name">AI Caricatures</span></div>
+    </div>
+    <div class="top-entry">
+      <div class="ent-arrow-group">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="0" x2="6" y2="14" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 10 L6 14 L10 10" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="0" x2="6" y2="14" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 10 L6 14 L10 10" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+      <span class="entry-label">Hall Entrances</span>
+      <div class="ent-arrow-group">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="0" x2="6" y2="14" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 10 L6 14 L10 10" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="0" x2="6" y2="14" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 10 L6 14 L10 10" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+    </div>
+    <div class="top-pair">
+      <div class="b b-perim avail"><span class="b-num">47</span><span class="b-name">Available</span></div>
+      <div class="b b-perim avail"><span class="b-num">46</span><span class="b-name">Available</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN HALL -->
+  <div class="hall">
+    <div class="hall-bl"></div>
+    <div class="hall-br"></div>
+
+  <div class="hall-main">
+    <!-- LEFT WALL: 37→29 -->
+    <div class="lwall">
+      <div class="b b-wall activ"><span class="b-num">37</span><span class="b-name">☕ Coffee</span></div>
+      <div class="b b-wall activ"><span class="b-num">36</span><span class="b-name">☕ Coffee</span></div>
+      <div class="b b-wall exhibitor"><span class="b-num">35</span><span class="b-name">WuXi AppTec</span></div>
+      <div class="b b-wall activ"><span class="b-num">34</span><span class="b-name">🍦 Ice Cream</span></div>
+      <div class="b b-wall activ"><span class="b-num">33</span><span class="b-name">🍦 Ice Cream</span></div>
+      <div class="b b-wall exhibitor"><span class="b-num">32</span><span class="b-name">ProteoGenix</span></div>
+      <div class="b b-wall bronze"><span class="b-num">31</span><span class="b-name">Syner-G Bio</span></div>
+      <div class="b b-wall exhibitor"><span class="b-num">30</span><span class="b-name">Quest Diagnostics</span></div>
+      <div class="b b-wall avail"><span class="b-num">29</span><span class="b-name">Available</span></div>
+    </div>
+
+    <!-- INTERIOR -->
+    <div class="interior">
+
+      <!-- CLUSTERS + BUFFET LINES -->
+      <div class="clusters-wrap">
+
+        <div class="buffet-line"><span class="bl-icon">🍴</span><span class="bl-text">Buffet</span></div>
+
+        <!-- LEFT COLUMN: upper-left + lower-left -->
+        <div class="cluster-col">
+          <div class="booth-row">
+            <div class="b b-sm avail"><span class="b-num">28</span><span class="b-name">Available</span></div>
+            <div class="b b-sm avail"><span class="b-num">27</span><span class="b-name">Available</span></div>
+            <div class="b b-sm activ"><span class="b-num">26</span><span class="b-name">LinkedIn Headshots</span></div>
+          </div>
+          <div class="booth-row">
+            <div class="b b-sm bronze"><span class="b-num">17</span><span class="b-name">QC Ware</span></div>
+            <div class="b b-dbl platinum"><span class="b-num">18–19</span><span class="b-name">Vultr</span></div>
+          </div>
+          <div class="cluster-gap"></div>
+          <div class="booth-row">
+            <div class="b b-sm silver"><span class="b-num">16</span><span class="b-name">Patsnap</span></div>
+            <div class="b b-sm exhibitor"><span class="b-num">15</span><span class="b-name">Cadence / OpenEye</span></div>
+            <div class="b b-sm gold"><span class="b-num">14</span><span class="b-name">Sigmatic Sciences</span></div>
+          </div>
+          <div class="booth-row">
+            <div class="b b-sm avail"><span class="b-num">5</span><span class="b-name">Available</span></div>
+            <div class="b b-sm avail"><span class="b-num">6</span><span class="b-name">Available</span></div>
+            <div class="b b-sm gold"><span class="b-num">7</span><span class="b-name">ChapsVision</span></div>
+          </div>
+        </div>
+
+        <div class="buffet-line"><span class="bl-icon">🍴</span><span class="bl-text">Buffet</span></div>
+
+        <!-- RIGHT COLUMN: upper-right + lower-right -->
+        <div class="cluster-col">
+          <div class="booth-row">
+            <div class="b b-sm exhibitor"><span class="b-num">25</span><span class="b-name">Biocytogen</span></div>
+            <div class="b b-sm avail"><span class="b-num">24</span><span class="b-name">Available</span></div>
+            <div class="b b-sm avail"><span class="b-num">23</span><span class="b-name">Available</span></div>
+          </div>
+          <div class="booth-row">
+            <div class="b b-sm silver"><span class="b-num">20</span><span class="b-name">MindWalk</span></div>
+            <div class="b b-sm avail"><span class="b-num">21</span><span class="b-name">Available</span></div>
+            <div class="b b-sm avail"><span class="b-num">22</span><span class="b-name">Available</span></div>
+          </div>
+          <div class="cluster-gap"></div>
+          <div class="booth-row">
+            <div class="b b-sm silver"><span class="b-num">13</span><span class="b-name">SPOC Biosciences</span></div>
+            <div class="b b-dbl silver"><span class="b-num">11–12</span><span class="b-name">Bluenote</span></div>
+          </div>
+          <div class="booth-row">
+            <div class="b b-sm gold"><span class="b-num">8</span><span class="b-name">Lambda Labs</span></div>
+            <div class="b b-sm gold"><span class="b-num">9</span><span class="b-name">Cloudera</span></div>
+            <div class="b b-sm platinum"><span class="b-num">10</span><span class="b-name">Google Cloud</span></div>
+          </div>
+        </div>
+
+        <div class="buffet-line"><span class="bl-icon">🍴</span><span class="bl-text">Buffet</span></div>
+
+      </div>
+
+
+    </div>
+
+    <!-- RIGHT WALL: 45→38 -->
+    <div class="rwall">
+      <div class="b b-wall activ"><span class="b-num">45</span><span class="b-name">☕ Coffee</span></div>
+      <div class="b b-wall activ"><span class="b-num">44</span><span class="b-name">☕ Coffee</span></div>
+      <div class="b b-wall bronze"><span class="b-num">43</span><span class="b-name">Zifo</span></div>
+      <div class="b b-wall avail"><span class="b-num">42</span><span class="b-name">Available</span></div>
+      <div class="b b-wall avail"><span class="b-num">41</span><span class="b-name">Available</span></div>
+      <div class="b b-wall bronze"><span class="b-num">40</span><span class="b-name">Union.ai</span></div>
+      <div class="b b-wall avail"><span class="b-num">39</span><span class="b-name">Available</span></div>
+      <div class="b b-wall avail"><span class="b-num">38</span><span class="b-name">Available</span></div>
+    </div>
+  </div><!-- /hall-main -->
+
+  <div class="hall-bottom">
+    <div class="b b-perim avail"><span class="b-num">1</span><span class="b-name">Available</span></div>
+    <div class="b b-perim avail"><span class="b-num">2</span><span class="b-name">Available</span></div>
+    <div class="b b-perim exhibitor"><span class="b-num">3</span><span class="b-name">Quantori</span></div>
+    <div class="b b-perim bronze"><span class="b-num">4</span><span class="b-name">Matterworks</span></div>
+  </div>
+
+</div><!-- /hall -->
+
+  <!-- ENTRANCES -->
+  <div class="entrances-strip">
+    <div class="ent-arrow-group">
+      <div class="ent-arrow">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="16" x2="6" y2="2" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 6 L6 2 L10 6" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="ent-arrow">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="16" x2="6" y2="2" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 6 L6 2 L10 6" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+    </div>
+    <span class="ent-label">Hall Entrances</span>
+    <div class="ent-arrow-group">
+      <div class="ent-arrow">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="16" x2="6" y2="2" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 6 L6 2 L10 6" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="ent-arrow">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="none">
+          <line x1="6" y1="16" x2="6" y2="2" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M2 6 L6 2 L10 6" stroke="#ff3131" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOYER -->
+  <div class="foyer-wrap">
+    <div class="foyer-label">— Foyer —</div>
+    <div class="foyer-row">
+      <div class="b b-foyer activ"><span class="b-num">F9</span><span class="b-name">⛳ Golf Simulator</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F8</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F7</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F6</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F5</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F4</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F3</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F2</span><span class="b-name">Available</span></div>
+      <div class="b b-foyer avail"><span class="b-num">F1</span><span class="b-name">Available</span></div>
+    </div>
+  </div>
+
+</div><!-- /venue -->
+
+<!-- LEGEND -->
+<div class="legend">
+  <span class="legend-heading">Legend</span>
+  <div class="legend-item"><div class="l-sw platinum"></div><span class="legend-text">Platinum Sponsor</span></div>
+  <div class="legend-item"><div class="l-sw gold"></div><span class="legend-text">Gold Sponsor</span></div>
+  <div class="legend-item"><div class="l-sw silver"></div><span class="legend-text">Silver Sponsor</span></div>
+  <div class="legend-item"><div class="l-sw bronze"></div><span class="legend-text">Bronze Sponsor</span></div>
+  <div class="legend-item"><div class="l-sw exhibitor"></div><span class="legend-text">Exhibitor</span></div>
+  <div class="legend-item"><div class="l-sw activ"></div><span class="legend-text">Experiences</span></div>
+  <div class="legend-item"><div class="l-sw avail"></div><span class="legend-text">Available</span></div>
+</div>
+
+<!-- NOTES -->
+<div class="notes">
+  <strong>Unplaced:</strong> Bullfrog AI (Platinum) · Cradle (Bronze) — booth assignments TBC &nbsp;&nbsp;&nbsp;
+  <strong>Contact:</strong> <a href="mailto:joe.hargreaves@kisacoresearch.com" class="notes-contact">joe.hargreaves@kisacoresearch.com</a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span class="footer-edition">5th Annual Edition &nbsp;·&nbsp; Boston 2026</span>
+</div>
+
+</div><!-- /wrap -->
+</body>
+</html>
